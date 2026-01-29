@@ -16,3 +16,4 @@ todos.json
 .netlify
 .env.local
 .env
+.vercel
