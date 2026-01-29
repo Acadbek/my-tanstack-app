@@ -6,7 +6,6 @@ import { fileURLToPath, URL } from 'url'
 
 import tailwindcss from '@tailwindcss/vite'
 import neon from './neon-vite-plugin.ts'
-import netlify from '@netlify/vite-plugin-tanstack-start'
 
 const config = defineConfig({
   resolve: {
@@ -16,7 +15,6 @@ const config = defineConfig({
   },
   plugins: [
     neon,
-    netlify(),
     // this is the plugin that enables path aliases
     viteTsConfigPaths({
       projects: ['./tsconfig.json'],
