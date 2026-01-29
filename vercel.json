@@ -1,11 +1,5 @@
 {
   "buildCommand": "pnpm build",
-  "outputDirectory": ".output/public",
-  "framework": null,
-  "rewrites": [
-    {
-      "source": "/(.*)",
-      "destination": "/api/server"
-    }
-  ]
+  "outputDirectory": ".vinxi/output/public",
+  "framework": null
 }
