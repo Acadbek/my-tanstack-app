@@ -9,6 +9,7 @@
     "test": "vitest run",
     "start": "node --import ./.output/server/instrument.server.mjs .output/server/index.mjs",
     "db:seed": "dotenv -e .env.local -- tsx src/db/seed.ts",
+    "db:migrate-run": "dotenv -e .env.local -- tsx scripts/run-migrations.ts",
     "db:generate": "dotenv -e .env.local -- drizzle-kit generate",
     "db:migrate": "dotenv -e .env.local -- drizzle-kit migrate",
     "db:push": "dotenv -e .env.local -- drizzle-kit push",

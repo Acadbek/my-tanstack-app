@@ -194,11 +194,14 @@ export type CreativeBrief = z.infer<typeof CreativeBriefSchema>;
 
 export const ConfigSchema = z.object({
   apifyToken: z.string().min(1, 'APIFY_API_TOKEN is required'),
-  aiProvider: z.enum(['gemini', 'openai']).default('gemini'),
+  aiProvider: z.enum(['gemini', 'openai', 'groq']).default('gemini'),
   geminiApiKey: z.string().optional(),
   geminiModel: z.string().optional(),
   geminiModels: z.array(z.string()).optional(),
   openaiApiKey: z.string().optional(),
+  groqApiKey: z.string().optional(),
+  groqModel: z.string().optional(),
+  groqModels: z.array(z.string()).optional(),
 }).refine(
   (data) => {
     if (data.aiProvider === 'gemini') {
@@ -206,6 +209,9 @@ export const ConfigSchema = z.object({
     }
     if (data.aiProvider === 'openai') {
       return !!data.openaiApiKey;
+    }
+    if (data.aiProvider === 'groq') {
+      return !!data.groqApiKey;
     }
     return false;
   },

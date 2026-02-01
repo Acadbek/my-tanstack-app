@@ -25,6 +25,11 @@ export const organizations = pgTable('organizations', {
   maxAnalysesPerMonth: integer('max_analyses_per_month').default(100),
   analysesUsedThisMonth: integer('analyses_used_this_month').default(0),
   
+  // AI Token Budget
+  aiTokenBudgetMonthly: integer('ai_token_budget_monthly').default(1000000), // 1M tokens default
+  aiTokensUsedThisMonth: integer('ai_tokens_used_this_month').default(0),
+  aiBudgetSpentCents: integer('ai_budget_spent_cents').default(0), // in USD cents
+  
   settings: jsonb('settings').$type<Record<string, any>>().default({}),
   createdAt: timestamp('created_at').defaultNow(),
   updatedAt: timestamp('updated_at').defaultNow(),
@@ -110,6 +115,32 @@ export const usageRecords = pgTable('usage_records', {
   
   periodStart: date('period_start').notNull(),
   periodEnd: date('period_end').notNull(),
+  
+  metadata: jsonb('metadata').default('{}'),
+  createdAt: timestamp('created_at').defaultNow(),
+});
+
+// AI Usage Tracking Table
+export const aiUsage = pgTable('ai_usage', {
+  id: serial('id').primaryKey(),
+  organizationId: integer('organization_id').references(() => organizations.id, { onDelete: 'cascade' }),
+  userId: integer('user_id').references(() => users.id, { onDelete: 'set null' }),
+  
+  provider: varchar('provider', { length: 50 }).notNull(), // 'gemini' | 'openai'
+  model: varchar('model', { length: 100 }).notNull(),
+  operationType: varchar('operation_type', { length: 50 }).notNull(), // 'video_analysis' | 'comment_analysis' | 'account_analysis'
+  
+  // Token usage
+  inputTokens: integer('input_tokens').default(0),
+  outputTokens: integer('output_tokens').default(0),
+  totalTokens: integer('total_tokens').default(0),
+  
+  // Cost tracking (in USD cents)
+  estimatedCostCents: integer('estimated_cost_cents').default(0),
+  
+  // Monthly tracking
+  periodMonth: integer('period_month').notNull(), // 1-12
+  periodYear: integer('period_year').notNull(),
   
   metadata: jsonb('metadata').default('{}'),
   createdAt: timestamp('created_at').defaultNow(),
